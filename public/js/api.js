@@ -29,5 +29,20 @@ const API = {
     }
   },
   // get last workout
+  async getLastWorkout() {
+    try {
+      const res = await fetch("/api/workouts");
+      const json = await res.json();
+      return json[json.length - 1];
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  },
   // get ranges of workout
+  async getWorkoutsInRange(){
+      try{
+          const res = await fet
+      }
+  }
 };
