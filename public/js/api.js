@@ -1,13 +1,33 @@
 const API = {
   // create new workout
   async createWorkout(data = {}) {
-    const res = await fetch("/api.workouts", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const res = await fetch("/api/workouts", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      });
+      return await res.json();
+    } catch (err) {
+      console.log(err);
+      return;
+    }
   },
   // add exercise to workout
+  async addExercise(data) {
+    try {
+      const id = location.search.split("=")[1];
+      const res = await fetch("/api/workouts/" + id, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      return await res.json();
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  },
   // get last workout
   // get ranges of workout
 };
