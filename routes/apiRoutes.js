@@ -22,9 +22,18 @@ router.post("/workouts", async ({ body }, res) => {
 });
 
 // add exercise to a workout with api/workouts/:uid
-router.put("/workouts/:id", async ({ body }, res) => {
+router.put("/workouts/:id", async ({ params, body }, res) => {
   try {
-    const workoutData = await Workout.updateOne(body);
+    const workoutData = await  Workout.updateOne(
+        {
+            _id: params.id
+        },
+        {
+            $push: {
+                exercise: body
+            }
+        });
+    
     res.status(200).json(workoutData);
   } catch (err) {
     res.status(500).json(err);
