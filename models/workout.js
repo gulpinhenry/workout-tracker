@@ -32,14 +32,14 @@ const workoutSchema = new Schema({
     },
   ],
   day: {
-      type: Date,
-      default: Date.now
+    type: Date,
+    default: Date.now,
   },
   // is this part necessary
   totalDuration: {
-      type: Number,
-      default: 0,
-  }
+    type: Number,
+    default: 0,
+  },
 });
 // make schema
 
