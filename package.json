@@ -4,7 +4,9 @@
   "description": "A workout tracker that creates and tracks workouts. Utilizes a Mongo database with Mongoose schema, Express.js route handler, Node.js, HTML, CSS, Vanilla JS",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "watch": "nodemon server.js",
+    "seed": "node seeds/seed.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   "homepage": "https://github.com/gulpinhenry/workout-tracker#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.15"
   }
 }
