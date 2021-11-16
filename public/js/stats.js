@@ -33,7 +33,22 @@ function getDay(data){
     return arr;
 }
 function getWeight(data){
+    let sum = [];
+    data.forEach((workout) => {
+        const workoutTotal = workout.exercise.reduce((total, { type, weight }) => {
+          if (type === 'resistance') {
+            return total + weight;
+          } else {
+            return total;
+          }
+        }, 0);
+    
+        sum.push(workoutTotal);
+      });
+    
+      
 
+  return sum;
 }
 // function getWorkouts(data){
 
