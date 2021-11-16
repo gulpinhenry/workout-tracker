@@ -1,6 +1,6 @@
-const workoutTypeSelect = document.querySelector("#type");
-const cardioForm = document.querySelector(".cardio-form");
-const resistanceForm = document.querySelector(".resistance-form");
+const typeInput = document.querySelector("#type");
+const cardioForm = document.querySelector("#cardio-form");
+const resistanceForm = document.querySelector("#resistance-form");
 const cardioNameInput = document.querySelector("#cardio-name");
 const nameInput = document.querySelector("#name");
 const weightInput = document.querySelector("#weight");
@@ -11,34 +11,18 @@ const resistanceDurationInput = document.querySelector("#resistance-duration");
 const distanceInput = document.querySelector("#distance");
 const completeButton = document.querySelector("button.complete");
 const addButton = document.querySelector("button.add-another");
-const toast = document.querySelector("#toast");
-const newWorkout = document.querySelector(".new-workout")
+const newWorkout = document.querySelector(".new-workout");
 
 let workoutType = null;
 let shouldNavigateAway = false;
 
-async function initExercise() {
-  let workout;
-
-  if (location.search.split("=")[1] === undefined) {
-    workout = await API.createWorkout()
-    console.log(workout)
-  }
-  if (workout) {
-    location.search = "?id=" + workout._id;
-  }
-
-}
-
-initExercise();
-
-function handleWorkoutTypeChange(event) {
+function changeWorkoutType(event) {
   workoutType = event.target.value;
 
-  if (workoutType === "cardio") {
+  if (workoutType == "cardio") {
     cardioForm.classList.remove("d-none");
     resistanceForm.classList.add("d-none");
-  } else if (workoutType === "resistance") {
+  } else if (workoutType == "resistance") {
     resistanceForm.classList.remove("d-none");
     cardioForm.classList.add("d-none");
   } else {
@@ -98,40 +82,61 @@ function validateInputs() {
 async function handleFormSubmit(event) {
   event.preventDefault();
 
-  let workoutData = {};
+  try {
+    let workoutData = {};
 
-  if (workoutType === "cardio") {
-    workoutData.type = "cardio";
-    workoutData.name = cardioNameInput.value.trim();
-    workoutData.distance = Number(distanceInput.value.trim());
-    workoutData.duration = Number(durationInput.value.trim());
-  } else if (workoutType === "resistance") {
-    workoutData.type = "resistance";
-    workoutData.name = nameInput.value.trim();
-    workoutData.weight = Number(weightInput.value.trim());
-    workoutData.sets = Number(setsInput.value.trim());
-    workoutData.reps = Number(repsInput.value.trim());
-    workoutData.duration = Number(resistanceDurationInput.value.trim());
+    if (workoutType === "cardio") {
+      workoutData.type = "cardio";
+      workoutData.name = cardioNameInput.value.trim();
+      workoutData.distance = Number(distanceInput.value.trim());
+      workoutData.duration = Number(durationInput.value.trim());
+    } else if (workoutType === "resistance") {
+      workoutData.type = "resistance";
+      workoutData.name = nameInput.value.trim();
+      workoutData.weight = Number(weightInput.value.trim());
+      workoutData.sets = Number(setsInput.value.trim());
+      workoutData.reps = Number(repsInput.value.trim());
+      workoutData.duration = Number(resistanceDurationInput.value.trim());
+    }
+    console.log(workoutData);
+    await API.addExercise(workoutData);
+    clearInputs();
+  } catch (err) {
+    console.log(err);
   }
-  console.log(workoutData);
-  await API.addExercise(workoutData);
-  clearInputs();
 }
-
 
 function clearInputs() {
   cardioNameInput.value = "";
   nameInput.value = "";
-  setsInput.value = "";
   distanceInput.value = "";
   durationInput.value = "";
+  weightInput.value = "";
+  setsInput.value = "";
   repsInput.value = "";
   resistanceDurationInput.value = "";
-  weightInput.value = "";
 }
 
-if (workoutTypeSelect) {
-  workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
+async function initExercise() {
+  try {
+    let workout;
+
+    if (location.search.split("=")[1] === undefined) {
+      workout = await API.createWorkout();
+      console.log(workout);
+    }
+    if (workout) {
+      location.search = "?id=" + workout._id;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+initExercise();
+
+if (typeInput) {
+  typeInput.addEventListener("change", changeWorkoutType);
 }
 if (completeButton) {
   completeButton.addEventListener("click", function (event) {
@@ -143,7 +148,6 @@ if (addButton) {
   addButton.addEventListener("click", handleFormSubmit);
 }
 
-
 document
   .querySelectorAll("input")
-  .forEach(element => element.addEventListener("input", validateInputs));
+  .forEach((element) => element.addEventListener("input", validateInputs));
